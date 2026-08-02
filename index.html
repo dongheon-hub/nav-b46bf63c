@@ -1,0 +1,113 @@
+<!doctype html><html lang="ko"><head><meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1"><title>모의투자 잔고</title>
+<style>
+:root{--bg:#e9ebf1;--surface:#fff;--surface-2:#f6f7fb;--chip:#eef0f6;--ink:#191c26;--ink-2:#616776;
+--ink-3:#8b91a2;--line:#e5e8f0;--brand:#282d55;--brand-2:#343a6e;--brand-ink:#e9ebff;--up:#e5484d;
+--down:#2f6fed;--up-soft:rgba(229,72,77,.12);--down-soft:rgba(47,111,237,.12);
+--shadow:0 1px 2px rgba(20,24,40,.05),0 8px 24px rgba(20,24,40,.06)}
+@media (prefers-color-scheme:dark){:root{--bg:#0c0e14;--surface:#191c24;--surface-2:#13151c;--chip:#232733;
+--ink:#eceef5;--ink-2:#9aa1b2;--ink-3:#6b7280;--line:#262b36;--brand:#1c1f3a;--brand-2:#262b52;
+--brand-ink:#dfe3ff;--up:#ff6b6b;--down:#5b8def;--up-soft:rgba(255,107,107,.14);--down-soft:rgba(91,141,239,.16);
+--shadow:0 1px 2px rgba(0,0,0,.4),0 10px 30px rgba(0,0,0,.35)}}
+:root[data-theme=light]{--bg:#e9ebf1;--surface:#fff;--surface-2:#f6f7fb;--chip:#eef0f6;--ink:#191c26;
+--ink-2:#616776;--ink-3:#8b91a2;--line:#e5e8f0;--brand:#282d55;--brand-2:#343a6e;--brand-ink:#e9ebff;
+--up:#e5484d;--down:#2f6fed;--up-soft:rgba(229,72,77,.12);--down-soft:rgba(47,111,237,.12)}
+:root[data-theme=dark]{--bg:#0c0e14;--surface:#191c24;--surface-2:#13151c;--chip:#232733;--ink:#eceef5;
+--ink-2:#9aa1b2;--ink-3:#6b7280;--line:#262b36;--brand:#1c1f3a;--brand-2:#262b52;--brand-ink:#dfe3ff;
+--up:#ff6b6b;--down:#5b8def;--up-soft:rgba(255,107,107,.14);--down-soft:rgba(91,141,239,.16)}
+*{box-sizing:border-box}body{margin:0;background:var(--bg);color:var(--ink);
+font-family:-apple-system,"Apple SD Gothic Neo","Pretendard","Noto Sans KR","Malgun Gothic",system-ui,sans-serif;
+-webkit-font-smoothing:antialiased;line-height:1.45;font-variant-numeric:tabular-nums;font-feature-settings:"tnum" 1}
+.num{font-variant-numeric:tabular-nums;letter-spacing:-.01em}
+.shell{max-width:452px;margin:0 auto;min-height:100vh;padding:0 0 40px}
+header{background:linear-gradient(160deg,var(--brand),var(--brand-2));color:var(--brand-ink);padding:20px 20px 16px}
+.hd-top{display:flex;align-items:center;justify-content:space-between;gap:10px}
+.hd-title{font-size:18px;font-weight:700}.hd-badge{font-size:11px;font-weight:600;letter-spacing:.04em;
+padding:3px 9px;border-radius:999px;background:rgba(255,255,255,.14)}
+.hd-acct{margin-top:14px;font-size:13px;color:rgba(233,235,255,.7)}.hd-acct b{color:var(--brand-ink);font-weight:600}
+.summary{margin:-6px 14px 0;background:var(--surface);border-radius:18px;box-shadow:var(--shadow);padding:18px;position:relative;z-index:2}
+.s-label{font-size:12px;color:var(--ink-2);font-weight:600}
+.nav-row{display:flex;align-items:flex-end;justify-content:space-between;gap:12px;margin-top:4px}
+.nav-val{font-size:30px;font-weight:800;letter-spacing:-.02em;line-height:1}.nav-val small{font-size:15px;font-weight:600;color:var(--ink-2);margin-left:3px}
+.pnl-amt{font-size:16px;font-weight:700;text-align:right}.pnl-pct{font-size:12.5px;font-weight:700;margin-top:2px;padding:2px 8px;border-radius:999px;display:inline-block}
+.down{color:var(--down)}.up{color:var(--up)}.down-bg{background:var(--down-soft);color:var(--down)}.up-bg{background:var(--up-soft);color:var(--up)}
+.seed{margin-top:12px;font-size:12px;color:var(--ink-3)}.seed b{color:var(--ink-2);font-weight:600}
+.spark{margin-top:14px;background:var(--surface-2);border:1px solid var(--line);border-radius:12px;padding:12px 12px 8px}
+.spark-head{display:flex;justify-content:space-between;font-size:11.5px;color:var(--ink-2);margin-bottom:6px}
+.spark-head b{color:var(--ink);font-weight:700}
+.grid{margin-top:14px;display:grid;grid-template-columns:1fr 1fr;gap:1px;background:var(--line);border-radius:12px;overflow:hidden}
+.cell{background:var(--surface);padding:11px 12px}.cell .k{font-size:11.5px;color:var(--ink-2);font-weight:600}.cell .v{font-size:15px;font-weight:700;margin-top:3px}
+.alloc{margin-top:14px}.alloc-bar{height:10px;border-radius:6px;overflow:hidden;display:flex;background:var(--chip)}
+.alloc-cash{background:var(--ink-3)}.alloc-pos{background:var(--brand-2)}
+:root[data-theme=dark] .alloc-pos{background:#4a52a0}
+.alloc-legend{display:flex;justify-content:space-between;margin-top:8px;font-size:11.5px;color:var(--ink-2)}.alloc-legend b{color:var(--ink);font-weight:700}
+.dot{display:inline-block;width:8px;height:8px;border-radius:2px;margin-right:5px;vertical-align:middle}
+.sec-head{display:flex;align-items:baseline;justify-content:space-between;padding:22px 22px 10px}
+.sec-head h2{margin:0;font-size:14px;font-weight:700}.sec-head span{font-size:12px;color:var(--ink-3)}
+.list{display:flex;flex-direction:column;gap:10px;padding:0 14px}
+.row{background:var(--surface);border-radius:14px;box-shadow:var(--shadow);padding:13px 15px;display:grid;grid-template-columns:1fr auto;gap:6px 12px;align-items:center}
+.r-name{font-size:15px;font-weight:700;display:flex;align-items:center;gap:7px}
+.code{font-size:10.5px;font-weight:600;color:var(--ink-3);background:var(--chip);padding:2px 6px;border-radius:5px}
+.r-sub{font-size:12px;color:var(--ink-2);margin-top:3px}.r-sub .arw{color:var(--ink-3);margin:0 4px}
+.r-right{text-align:right}.r-pnl{font-size:15px;font-weight:800}.r-pct{font-size:12px;font-weight:700;margin-top:2px}.r-qty{font-size:11px;color:var(--ink-3);margin-top:2px}
+.bar{grid-column:1/-1;height:4px;border-radius:3px;background:var(--chip);overflow:hidden;margin-top:2px}.bar>i{display:block;height:100%;border-radius:3px}
+footer{margin:20px 20px 0;font-size:11px;color:var(--ink-3);line-height:1.6}
+footer .cav{padding:12px 14px;background:var(--surface-2);border-radius:12px;border:1px solid var(--line)}footer b{color:var(--ink-2);font-weight:600}
+</style></head><body><div class="shell">
+<header><div class="hd-top"><div class="hd-title">모의투자 잔고</div><div class="hd-badge">PAPER · 시뮬레이션</div></div>
+<div class="hd-acct"><b>quant_stock</b> · 내부원장 | as-of <b id="asof"></b></div></header>
+<section class="summary">
+<div class="s-label">추정자산 (NAV)</div>
+<div class="nav-row"><div class="nav-val num" id="nav"></div><div><div class="pnl-amt num" id="pnl"></div><span class="pnl-pct num" id="pnlpct"></span></div></div>
+<div class="seed" id="seed"></div>
+<div class="spark"><div class="spark-head"><span>자산 곡선 <span id="spark-n" style="color:var(--ink-3)"></span></span><span id="spark-range"></span></div><svg id="spark" width="100%" height="52" viewBox="0 0 400 52" preserveAspectRatio="none"></svg></div>
+<div class="grid">
+<div class="cell"><div class="k">총매입 (포지션)</div><div class="v num" id="poscost"></div></div>
+<div class="cell"><div class="k">총평가 (포지션)</div><div class="v num" id="posval"></div></div>
+<div class="cell"><div class="k">실현손익</div><div class="v num" id="realized"></div></div>
+<div class="cell"><div class="k">평가손익 (미실현)</div><div class="v num" id="unreal"></div></div></div>
+<div class="alloc"><div class="alloc-bar"><div class="alloc-pos" id="al-pos"></div><div class="alloc-cash" id="al-cash"></div></div>
+<div class="alloc-legend"><span><span class="dot alloc-pos"></span>포지션 <b class="num" id="lg-pos"></b></span><span><span class="dot alloc-cash"></span>현금 <b class="num" id="lg-cash"></b></span></div></div>
+</section>
+<div class="sec-head"><h2>보유 종목 <span style="color:var(--ink-3);font-weight:600" id="nholds"></span></h2><span>평가손익 순 (손실 큰 순)</span></div>
+<div class="list" id="list"></div>
+<footer><div class="cav" id="cav"></div></footer></div>
+<script id="nav-data" type="application/json">{"asof": "2026-08-02 09:59", "nav": 9388015.386999998, "seed": 10000000.0, "total_pnl": -611984.6130000018, "pnl_pct": -6.119846130000017, "cash": 3282935.3869999987, "pos_value": 6105080.0, "pos_cost": 6690340.0, "realized": -25229.785, "unrealized": -585260.0, "mark_date": "일봉 2026-07-31", "ledger_mtime": "2026-07-31T15:35:06.959137", "rows": [{"symbol": "004170", "name": "004170", "qty": 1.0, "avg_price": 622000.0, "mark": 423000.0, "unrealized": -199000.0}, {"symbol": "069960", "name": "069960", "qty": 3.0, "avg_price": 165600.0, "mark": 118800.0, "unrealized": -140400.0}, {"symbol": "069500", "name": "KODEX 200", "qty": 14.0, "avg_price": 118782.85714285714, "mark": 108820.0, "unrealized": -139480.0}, {"symbol": "000500", "name": "000500", "qty": 1.0, "avg_price": 206000.0, "mark": 134200.0, "unrealized": -71800.0}, {"symbol": "055550", "name": "055550", "qty": 3.0, "avg_price": 110800.0, "mark": 100700.0, "unrealized": -30300.0}, {"symbol": "086790", "name": "086790", "qty": 1.0, "avg_price": 140500.0, "mark": 125400.0, "unrealized": -15100.0}, {"symbol": "010950", "name": "010950", "qty": 1.0, "avg_price": 140300.0, "mark": 127300.0, "unrealized": -13000.0}, {"symbol": "001800", "name": "001800", "qty": 12.0, "avg_price": 26150.0, "mark": 25500.0, "unrealized": -7800.0}, {"symbol": "229200", "name": "KODEX 코스닥150", "qty": 232.0, "avg_price": 11963.706896551725, "mark": 12100.0, "unrealized": 31620.0}], "history": [{"date": "2026-08-02", "nav": 9388015}]}</script>
+<script>
+const D=JSON.parse(document.getElementById("nav-data").textContent);
+const won=v=>(v<0?"\u2212":"")+Math.abs(Math.round(v)).toLocaleString("ko-KR");
+const dncls=v=>v<0?"down":"up";
+document.getElementById("asof").textContent=D.asof+" KST";
+document.getElementById("nav").innerHTML=won(D.nav)+'<small>원</small>';
+const pv=document.getElementById("pnl");pv.textContent=(D.total_pnl>=0?"+":"\u2212")+Math.abs(Math.round(D.total_pnl)).toLocaleString("ko-KR");pv.className="pnl-amt num "+dncls(D.total_pnl);
+const pp=document.getElementById("pnlpct");pp.textContent=(D.total_pnl>=0?"▲ ":"▼ ")+Math.abs(D.pnl_pct).toFixed(2)+"%";pp.className="pnl-pct num "+(D.total_pnl>=0?"up-bg":"down-bg");
+document.getElementById("seed").innerHTML='시드 <b class="num">'+won(D.seed)+'원</b> 대비 · 총손익 <b class="num '+dncls(D.total_pnl)+'">'+won(D.total_pnl)+'원</b>';
+document.getElementById("poscost").textContent=won(D.pos_cost);
+document.getElementById("posval").textContent=won(D.pos_value);
+const rz=document.getElementById("realized");rz.textContent=won(D.realized);rz.className="v num "+dncls(D.realized);
+const ur=document.getElementById("unreal");ur.textContent=won(D.unrealized);ur.className="v num "+dncls(D.unrealized);
+const posPct=D.nav>0?D.pos_value/D.nav*100:0;
+document.getElementById("al-pos").style.width=posPct.toFixed(1)+"%";
+document.getElementById("al-cash").style.width=(100-posPct).toFixed(1)+"%";
+document.getElementById("lg-pos").textContent=won(D.pos_value)+" · "+posPct.toFixed(1)+"%";
+document.getElementById("lg-cash").textContent=won(D.cash)+" · "+(100-posPct).toFixed(1)+"%";
+document.getElementById("nholds").textContent=D.rows.length;
+document.getElementById("list").innerHTML=D.rows.map(h=>{
+const pnl=h.unrealized,pct=h.avg_price>0?(h.mark/h.avg_price-1)*100:0,up=pnl>=0,cls=up?"up":"down";
+const w=Math.min(Math.abs(pct)/40,1)*100;const etf=(h.name||"").indexOf("KODEX")>=0||(h.name||"").indexOf("TIGER")>=0;
+return '<div class="row"><div><div class="r-name">'+(h.name||h.symbol)+(etf?' <span class="code" style="background:var(--down-soft);color:var(--down)">ETF</span>':'')+'<span class="code">'+h.symbol+'</span></div><div class="r-sub num">'+Math.round(h.avg_price).toLocaleString("ko-KR")+'<span class="arw">→</span>'+Math.round(h.mark).toLocaleString("ko-KR")+'</div></div><div class="r-right"><div class="r-pnl num '+cls+'">'+(up?"+":"\u2212")+Math.abs(Math.round(pnl)).toLocaleString("ko-KR")+'</div><div class="r-pct num '+cls+'">'+(up?"▲":"▼")+' '+Math.abs(pct).toFixed(1)+'%</div><div class="r-qty num">'+Math.round(h.qty)+'주</div></div><div class="bar"><i style="width:'+w+'%;background:var(--'+(up?"up":"down")+')"></i></div></div>';
+}).join("");
+// 스파크라인
+const H=D.history||[];document.getElementById("spark-n").textContent="("+H.length+"일)";
+const svg=document.getElementById("spark");
+if(H.length>=2){const navs=H.map(r=>r.nav),mn=Math.min(...navs),mx=Math.max(...navs),W=400,Hh=52,pad=4;
+const x=i=>H.length<2?W/2:pad+i*(W-2*pad)/(H.length-1);
+const y=v=>mx===mn?Hh/2:Hh-pad-(v-mn)*(Hh-2*pad)/(mx-mn);
+const pts=H.map((r,i)=>x(i).toFixed(1)+","+y(r.nav).toFixed(1)).join(" ");
+const last=H[H.length-1],up=last.nav>=D.seed,col=up?"var(--up)":"var(--down)";
+const area="M"+pad+","+Hh+" L"+pts.replace(/ /g," L")+" L"+(W-pad)+","+Hh+" Z";
+svg.innerHTML='<path d="'+area+'" fill="'+(up?"var(--up-soft)":"var(--down-soft)")+'" stroke="none"/><polyline points="'+pts+'" fill="none" stroke="'+col+'" stroke-width="2" stroke-linejoin="round" vector-effect="non-scaling-stroke"/><circle cx="'+x(H.length-1).toFixed(1)+'" cy="'+y(last.nav).toFixed(1)+'" r="3" fill="'+col+'"/>';
+document.getElementById("spark-range").innerHTML='최저 <b>'+won(mn)+'</b> · 최고 <b>'+won(mx)+'</b>';
+}else{svg.innerHTML='<text x="200" y="30" text-anchor="middle" fill="var(--ink-3)" font-size="11">곡선은 매일 자동 축적됩니다 (현재 '+H.length+'일)</text>';document.getElementById("spark-range").textContent="";}
+document.getElementById("cav").innerHTML='※ 평가가격 = <b>'+D.mark_date+'(약 15분 지연)</b> · 원장 = <b>직전 마감('+(D.ledger_mtime||"").slice(0,16)+')</b> 기준. 당일 장중 체결 미반영 가능한 <b>근사 스냅샷</b>.';
+</script></body></html>
