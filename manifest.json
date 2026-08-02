@@ -1,0 +1,8 @@
+{
+  "name":"모의투자 잔고","short_name":"모의투자",
+  "description":"quant_stock 모의투자 NAV 대시보드",
+  "start_url":"./","scope":"./","display":"standalone","orientation":"portrait",
+  "background_color":"#0c0e14","theme_color":"#282d55",
+  "icons":[{"src":"icon-192.png","sizes":"192x192","type":"image/png","purpose":"any maskable"},
+  {"src":"icon-512.png","sizes":"512x512","type":"image/png","purpose":"any"}]
+}
