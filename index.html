@@ -1,5 +1,12 @@
 <!doctype html><html lang="ko"><head><meta charset="utf-8">
-<meta name="viewport" content="width=device-width,initial-scale=1"><title>모의투자 잔고</title>
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover"><title>모의투자 잔고</title>
+<meta name="theme-color" content="#282d55">
+<link rel="manifest" href="manifest.json">
+<link rel="apple-touch-icon" href="apple-touch-icon.png">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+<meta name="apple-mobile-web-app-title" content="모의투자">
 <style>
 :root{--bg:#e9ebf1;--surface:#fff;--surface-2:#f6f7fb;--chip:#eef0f6;--ink:#191c26;--ink-2:#616776;
 --ink-3:#8b91a2;--line:#e5e8f0;--brand:#282d55;--brand-2:#343a6e;--brand-ink:#e9ebff;--up:#e5484d;
@@ -72,7 +79,7 @@ footer .cav{padding:12px 14px;background:var(--surface-2);border-radius:12px;bor
 <div class="sec-head"><h2>보유 종목 <span style="color:var(--ink-3);font-weight:600" id="nholds"></span></h2><span>평가손익 순 (손실 큰 순)</span></div>
 <div class="list" id="list"></div>
 <footer><div class="cav" id="cav"></div></footer></div>
-<script id="nav-data" type="application/json">{"asof": "2026-08-02 10:25", "nav": 9388015.386999998, "seed": 10000000.0, "total_pnl": -611984.6130000018, "pnl_pct": -6.119846130000017, "cash": 3282935.3869999987, "pos_value": 6105080.0, "pos_cost": 6690340.0, "realized": -25229.785, "unrealized": -585260.0, "mark_date": "일봉 2026-07-31", "ledger_mtime": "2026-07-31T15:35:06.959137", "rows": [{"symbol": "004170", "name": "004170", "qty": 1.0, "avg_price": 622000.0, "mark": 423000.0, "unrealized": -199000.0}, {"symbol": "069960", "name": "069960", "qty": 3.0, "avg_price": 165600.0, "mark": 118800.0, "unrealized": -140400.0}, {"symbol": "069500", "name": "KODEX 200", "qty": 14.0, "avg_price": 118782.85714285714, "mark": 108820.0, "unrealized": -139480.0}, {"symbol": "000500", "name": "000500", "qty": 1.0, "avg_price": 206000.0, "mark": 134200.0, "unrealized": -71800.0}, {"symbol": "055550", "name": "055550", "qty": 3.0, "avg_price": 110800.0, "mark": 100700.0, "unrealized": -30300.0}, {"symbol": "086790", "name": "086790", "qty": 1.0, "avg_price": 140500.0, "mark": 125400.0, "unrealized": -15100.0}, {"symbol": "010950", "name": "010950", "qty": 1.0, "avg_price": 140300.0, "mark": 127300.0, "unrealized": -13000.0}, {"symbol": "001800", "name": "001800", "qty": 12.0, "avg_price": 26150.0, "mark": 25500.0, "unrealized": -7800.0}, {"symbol": "229200", "name": "KODEX 코스닥150", "qty": 232.0, "avg_price": 11963.706896551725, "mark": 12100.0, "unrealized": 31620.0}], "history": [{"date": "2026-08-02", "nav": 9388015}]}</script>
+<script id="nav-data" type="application/json">{"asof": "2026-08-02 10:36", "nav": 9388015.386999998, "seed": 10000000.0, "total_pnl": -611984.6130000018, "pnl_pct": -6.119846130000017, "cash": 3282935.3869999987, "pos_value": 6105080.0, "pos_cost": 6690340.0, "realized": -25229.785, "unrealized": -585260.0, "mark_date": "일봉 2026-07-31", "ledger_mtime": "2026-07-31T15:35:06.959137", "rows": [{"symbol": "004170", "name": "004170", "qty": 1.0, "avg_price": 622000.0, "mark": 423000.0, "unrealized": -199000.0}, {"symbol": "069960", "name": "069960", "qty": 3.0, "avg_price": 165600.0, "mark": 118800.0, "unrealized": -140400.0}, {"symbol": "069500", "name": "KODEX 200", "qty": 14.0, "avg_price": 118782.85714285714, "mark": 108820.0, "unrealized": -139480.0}, {"symbol": "000500", "name": "000500", "qty": 1.0, "avg_price": 206000.0, "mark": 134200.0, "unrealized": -71800.0}, {"symbol": "055550", "name": "055550", "qty": 3.0, "avg_price": 110800.0, "mark": 100700.0, "unrealized": -30300.0}, {"symbol": "086790", "name": "086790", "qty": 1.0, "avg_price": 140500.0, "mark": 125400.0, "unrealized": -15100.0}, {"symbol": "010950", "name": "010950", "qty": 1.0, "avg_price": 140300.0, "mark": 127300.0, "unrealized": -13000.0}, {"symbol": "001800", "name": "001800", "qty": 12.0, "avg_price": 26150.0, "mark": 25500.0, "unrealized": -7800.0}, {"symbol": "229200", "name": "KODEX 코스닥150", "qty": 232.0, "avg_price": 11963.706896551725, "mark": 12100.0, "unrealized": 31620.0}], "history": [{"date": "2026-08-02", "nav": 9388015}]}</script>
 <script>
 const D=JSON.parse(document.getElementById("nav-data").textContent);
 const won=v=>(v<0?"\u2212":"")+Math.abs(Math.round(v)).toLocaleString("ko-KR");
@@ -110,4 +117,5 @@ svg.innerHTML='<path d="'+area+'" fill="'+(up?"var(--up-soft)":"var(--down-soft)
 document.getElementById("spark-range").innerHTML='최저 <b>'+won(mn)+'</b> · 최고 <b>'+won(mx)+'</b>';
 }else{svg.innerHTML='<text x="200" y="30" text-anchor="middle" fill="var(--ink-3)" font-size="11">곡선은 매일 자동 축적됩니다 (현재 '+H.length+'일)</text>';document.getElementById("spark-range").textContent="";}
 document.getElementById("cav").innerHTML='※ 평가가격 = <b>'+D.mark_date+'(약 15분 지연)</b> · 원장 = <b>직전 마감('+(D.ledger_mtime||"").slice(0,16)+')</b> 기준. 당일 장중 체결 미반영 가능한 <b>근사 스냅샷</b>.';
+if("serviceWorker"in navigator){navigator.serviceWorker.register("sw.js").catch(function(){});}
 </script></body></html>
