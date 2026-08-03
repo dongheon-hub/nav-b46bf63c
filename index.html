@@ -1,12 +1,12 @@
 <!doctype html><html lang="ko"><head><meta charset="utf-8">
-<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover"><title>모의투자 잔고</title>
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover"><title>Quant Stock 잔고</title>
 <meta name="theme-color" content="#282d55">
 <link rel="manifest" href="manifest.json">
 <link rel="apple-touch-icon" href="apple-touch-icon.png">
 <meta name="apple-mobile-web-app-capable" content="yes">
 <meta name="mobile-web-app-capable" content="yes">
 <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
-<meta name="apple-mobile-web-app-title" content="모의투자">
+<meta name="apple-mobile-web-app-title" content="Quant Stock">
 <style>
 :root{--bg:#e9ebf1;--surface:#fff;--surface-2:#f6f7fb;--chip:#eef0f6;--ink:#191c26;--ink-2:#616776;
 --ink-3:#8b91a2;--line:#e5e8f0;--brand:#282d55;--brand-2:#343a6e;--brand-ink:#e9ebff;--up:#e5484d;
@@ -60,9 +60,22 @@ padding:3px 9px;border-radius:999px;background:rgba(255,255,255,.14)}
 .bar{grid-column:1/-1;height:4px;border-radius:3px;background:var(--chip);overflow:hidden;margin-top:2px}.bar>i{display:block;height:100%;border-radius:3px}
 footer{margin:20px 20px 0;font-size:11px;color:var(--ink-3);line-height:1.6}
 footer .cav{padding:12px 14px;background:var(--surface-2);border-radius:12px;border:1px solid var(--line)}footer b{color:var(--ink-2);font-weight:600}
+.tabs{display:flex;gap:6px;margin:14px 14px 0;background:var(--chip);border-radius:12px;padding:4px}
+.tab{flex:1;text-align:center;font-size:13px;font-weight:700;color:var(--ink-2);padding:9px 8px;border-radius:9px;cursor:pointer;border:none;background:none;font-family:inherit}
+.tab.on{background:var(--surface);color:var(--ink);box-shadow:var(--shadow)}
+.trd-grp{padding:0 14px}.trd-grp h3{display:flex;align-items:center;gap:8px;font-size:13px;font-weight:700;margin:20px 4px 10px}
+.trd-grp h3 .tag{font-size:11px;font-weight:700;padding:3px 9px;border-radius:999px}
+.tag.buy{background:var(--up-soft);color:var(--up)}.tag.sell{background:var(--down-soft);color:var(--down)}
+.trd{background:var(--surface);border-radius:14px;box-shadow:var(--shadow);padding:12px 15px;display:grid;grid-template-columns:1fr auto;gap:3px 12px;align-items:center;margin-bottom:10px}
+.trd .t-name{font-size:14.5px;font-weight:700;display:flex;align-items:center;gap:7px}
+.trd .t-sub{font-size:11.5px;color:var(--ink-3)}.trd .t-amt{font-size:14.5px;font-weight:800;text-align:right}
+.trd .t-qty{font-size:11.5px;color:var(--ink-2);text-align:right;margin-top:2px}
+.trd-empty{margin:0 4px;padding:22px 16px;text-align:center;color:var(--ink-3);font-size:13px;background:var(--surface-2);border:1px dashed var(--line);border-radius:12px}
 </style></head><body><div class="shell">
-<header><div class="hd-top"><div class="hd-title">모의투자 잔고</div><div class="hd-badge">PAPER · 시뮬레이션</div></div>
+<header><div class="hd-top"><div class="hd-title">Quant Stock</div><div class="hd-badge">PAPER · 시뮬레이션</div></div>
 <div class="hd-acct"><b>quant_stock</b> · 내부원장 | as-of <b id="asof"></b></div></header>
+<div class="tabs"><button class="tab on" id="tab-bal" onclick="showTab('bal')">잔고</button><button class="tab" id="tab-trd" onclick="showTab('trd')">금일매매</button></div>
+<div id="view-bal">
 <section class="summary">
 <div class="s-label">추정자산 (NAV)</div>
 <div class="nav-row"><div class="nav-val num" id="nav"></div><div><div class="pnl-amt num" id="pnl"></div><span class="pnl-pct num" id="pnlpct"></span></div></div>
@@ -78,8 +91,15 @@ footer .cav{padding:12px 14px;background:var(--surface-2);border-radius:12px;bor
 </section>
 <div class="sec-head"><h2>보유 종목 <span style="color:var(--ink-3);font-weight:600" id="nholds"></span></h2><span>평가손익 순 (손실 큰 순)</span></div>
 <div class="list" id="list"></div>
-<footer><div class="cav" id="cav"></div></footer></div>
-<script id="nav-data" type="application/json">{"asof": "2026-08-03 12:30", "nav": 9353155.386999998, "seed": 10000000.0, "total_pnl": -646844.6130000018, "pnl_pct": -6.468446130000016, "cash": 3282935.3869999987, "pos_value": 6070220.0, "pos_cost": 6690340.0, "realized": -25229.785, "unrealized": -620120.0, "mark_date": "Naver 근실시간", "ledger_mtime": "2026-08-03T12:25:26.245682", "rows": [{"symbol": "069500", "name": "KODEX 200", "qty": 14.0, "avg_price": 118782.85714285714, "mark": 99330.0, "unrealized": -272340.0}, {"symbol": "004170", "name": "004170", "qty": 1.0, "avg_price": 622000.0, "mark": 406000.0, "unrealized": -216000.0}, {"symbol": "069960", "name": "069960", "qty": 3.0, "avg_price": 165600.0, "mark": 115300.0, "unrealized": -150900.0}, {"symbol": "000500", "name": "000500", "qty": 1.0, "avg_price": 206000.0, "mark": 136700.0, "unrealized": -69300.0}, {"symbol": "055550", "name": "055550", "qty": 3.0, "avg_price": 110800.0, "mark": 101600.0, "unrealized": -27600.0}, {"symbol": "010950", "name": "010950", "qty": 1.0, "avg_price": 140300.0, "mark": 120300.0, "unrealized": -20000.0}, {"symbol": "086790", "name": "086790", "qty": 1.0, "avg_price": 140500.0, "mark": 126100.0, "unrealized": -14400.0}, {"symbol": "001800", "name": "001800", "qty": 12.0, "avg_price": 26150.0, "mark": 25900.0, "unrealized": -3000.0}, {"symbol": "229200", "name": "KODEX 코스닥150", "qty": 232.0, "avg_price": 11963.706896551725, "mark": 12625.0, "unrealized": 153420.0}], "history": [{"date": "2026-08-02", "nav": 9388015}, {"date": "2026-08-03", "nav": 9353155}]}</script>
+<footer><div class="cav" id="cav"></div></footer>
+</div>
+<div id="view-trd" hidden>
+<div class="sec-head"><h2>금일 매매 <span style="color:var(--ink-3);font-weight:600" id="trd-date"></span></h2><span id="trd-cnt"></span></div>
+<div class="trd-grp"><h3>매수 <span class="tag buy" id="buy-n">0</span></h3><div id="buys"></div></div>
+<div class="trd-grp"><h3>매도 <span class="tag sell" id="sell-n">0</span></h3><div id="sells"></div></div>
+<footer><div class="cav">※ 내부 PaperPortfolio 원장 기준 <b>금일 체결</b>. 정기 리밸런스는 종가단일가(15:20~30)에 체결 → 장 마감 후 반영. 자본 0·시뮬레이션.</div></footer>
+</div>
+<script id="nav-data" type="application/json">{"asof": "2026-08-03 12:45", "trades": {"buys": [], "sells": [], "date": "2026-08-03"}, "nav": 9375055.386999998, "seed": 10000000.0, "total_pnl": -624944.6130000018, "pnl_pct": -6.249446130000013, "cash": 3282935.3869999987, "pos_value": 6092120.0, "pos_cost": 6690340.0, "realized": -25229.785, "unrealized": -598220.0, "mark_date": "Naver 근실시간", "ledger_mtime": "2026-08-03T12:45:30.221775", "rows": [{"symbol": "069500", "name": "KODEX 200", "qty": 14.0, "avg_price": 118782.85714285714, "mark": 99465.0, "unrealized": -270450.0}, {"symbol": "004170", "name": "신세계", "qty": 1.0, "avg_price": 622000.0, "mark": 407250.0, "unrealized": -214750.0}, {"symbol": "069960", "name": "현대백화점", "qty": 3.0, "avg_price": 165600.0, "mark": 116000.0, "unrealized": -148800.0}, {"symbol": "000500", "name": "가온전선", "qty": 1.0, "avg_price": 206000.0, "mark": 136900.0, "unrealized": -69100.0}, {"symbol": "055550", "name": "신한지주", "qty": 3.0, "avg_price": 110800.0, "mark": 101300.0, "unrealized": -28500.0}, {"symbol": "010950", "name": "S-Oil", "qty": 1.0, "avg_price": 140300.0, "mark": 120400.0, "unrealized": -19900.0}, {"symbol": "086790", "name": "하나금융지주", "qty": 1.0, "avg_price": 140500.0, "mark": 126000.0, "unrealized": -14500.0}, {"symbol": "001800", "name": "오리온홀딩스", "qty": 12.0, "avg_price": 26150.0, "mark": 25800.0, "unrealized": -4200.0}, {"symbol": "229200", "name": "KODEX 코스닥150", "qty": 232.0, "avg_price": 11963.706896551725, "mark": 12705.0, "unrealized": 171980.0}], "history": [{"date": "2026-08-02", "nav": 9388015}, {"date": "2026-08-03", "nav": 9375055}]}</script>
 <script>
 const D=JSON.parse(document.getElementById("nav-data").textContent);
 const won=v=>(v<0?"\u2212":"")+Math.abs(Math.round(v)).toLocaleString("ko-KR");
@@ -117,5 +137,17 @@ svg.innerHTML='<path d="'+area+'" fill="'+(up?"var(--up-soft)":"var(--down-soft)
 document.getElementById("spark-range").innerHTML='최저 <b>'+won(mn)+'</b> · 최고 <b>'+won(mx)+'</b>';
 }else{svg.innerHTML='<text x="200" y="30" text-anchor="middle" fill="var(--ink-3)" font-size="11">곡선은 매일 자동 축적됩니다 (현재 '+H.length+'일)</text>';document.getElementById("spark-range").textContent="";}
 document.getElementById("cav").innerHTML='※ 평가가격 = <b>'+D.mark_date+'(약 15분 지연)</b> · 원장 = <b>직전 마감('+(D.ledger_mtime||"").slice(0,16)+')</b> 기준. 당일 장중 체결 미반영 가능한 <b>근사 스냅샷</b>.';
+// ── 금일매매 탭 ──
+const T=D.trades||{buys:[],sells:[],date:""};
+document.getElementById("trd-date").textContent=T.date||"";
+document.getElementById("buy-n").textContent=T.buys.length;
+document.getElementById("sell-n").textContent=T.sells.length;
+document.getElementById("trd-cnt").textContent="총 "+(T.buys.length+T.sells.length)+"건";
+const trdRow=t=>'<div class="trd"><div><div class="t-name">'+(t.name||t.symbol)+'<span class="code">'+t.symbol+'</span></div><div class="t-sub num">'+(t.time||"")+' · @'+Math.round(t.price).toLocaleString("ko-KR")+'원</div></div><div><div class="t-amt num">'+Math.round(t.amount).toLocaleString("ko-KR")+'원</div><div class="t-qty num">'+Math.round(t.qty)+'주</div></div></div>';
+const fillGrp=(id,arr)=>{document.getElementById(id).innerHTML=arr.length?arr.map(trdRow).join(""):'<div class="trd-empty">금일 '+(id==="buys"?"매수":"매도")+' 체결 없음</div>';};
+fillGrp("buys",T.buys);fillGrp("sells",T.sells);
+function showTab(k){const bal=k==="bal";document.getElementById("view-bal").hidden=!bal;document.getElementById("view-trd").hidden=bal;
+document.getElementById("tab-bal").classList.toggle("on",bal);document.getElementById("tab-trd").classList.toggle("on",!bal);window.scrollTo(0,0);}
+window.showTab=showTab;
 if("serviceWorker"in navigator){navigator.serviceWorker.register("sw.js").catch(function(){});}
 </script></body></html>
