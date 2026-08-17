@@ -30,18 +30,21 @@ jobs:
           DAY=$(TZ=Asia/Seoul date +%Y%m%d)
           echo "KST $ISO 판정 시작"
 
+          # 파일은 raw 로 받는다 — .content(base64) 는 404 응답을 디코드하려다 깨진다.
+          raw() { gh api "repos/$REPO/contents/$1" -H 'Accept: application/vnd.github.raw' 2>/dev/null || true; }
+
           # 평일 휴장일(설·추석·대체공휴일 등)은 산출물이 없는 것이 정상.
           # 목록은 기계 쪽 calendar.py 가 holidays.json 으로 내보낸다.
-          HOL=$(gh api "repos/$REPO/contents/holidays.json" --jq .content 2>/dev/null | base64 -d || echo '')
-          if [ -n "$HOL" ] && echo "$HOL" | jq -e --arg d "$ISO" '.non_trading_weekdays | index($d) != null' >/dev/null; then
+          HOL=$(raw holidays.json)
+          if [ -n "$HOL" ] && echo "$HOL" | jq -e --arg d "$ISO" '.non_trading_weekdays | index($d) != null' >/dev/null 2>&1; then
             echo "휴장일 — 확인 생략"; exit 0
           fi
 
-          HB=$(gh api "repos/$REPO/contents/heartbeat/$DAY.json" --jq .content 2>/dev/null | base64 -d || echo '')
+          HB=$(raw "heartbeat/$DAY.json")
           ALIVE=''; DIGEST=''
           if [ -n "$HB" ]; then
-            ALIVE=$(echo "$HB" | jq -r '.kinds.alive.at  // ""')
-            DIGEST=$(echo "$HB" | jq -r '.kinds.digest.at // ""')
+            ALIVE=$(echo "$HB" | jq -r '.kinds.alive.at  // ""' 2>/dev/null || echo '')
+            DIGEST=$(echo "$HB" | jq -r '.kinds.digest.at // ""' 2>/dev/null || echo '')
           fi
 
           if [ -n "$ALIVE" ] && [ -n "$DIGEST" ]; then
@@ -59,13 +62,16 @@ jobs:
             ACT='phase1_auto_daily 게이트 로그 확인.'
           fi
 
+          # ★--repo 필수: 이 잡은 체크아웃하지 않으므로 git 컨텍스트가 없다.
+          #   빠뜨리면 "not a git repository" 로 죽어 **경보가 조용히 사라진다**(2026-08-17 실측).
           TITLE="[미가동 의심] $ISO 산출물 미도착"
-          FOUND=$(gh issue list --state open --search "in:title \"$TITLE\"" --json number --jq 'length')
+          FOUND=$(gh issue list --repo "$REPO" --state open --search "in:title \"$TITLE\"" --json number --jq 'length')
           if [ "$FOUND" != "0" ]; then
             echo "이미 열린 이슈 있음 — 중복 생성 생략"; exit 0
           fi
 
           gh issue create \
+            --repo "$REPO" \
             --title "$TITLE" \
             --assignee dongheonlee-hub \
             --body "$(printf '%s\n\n**판정**: %s\n\n**첫 확인**: %s\n\n---\n이 이슈는 honey 의 기계 밖(GitHub Actions)에서 자동 생성됐다.\n기계가 꺼져도 이 감시는 살아있다 — 그것이 이 장치의 존재 이유다.\n오탐이면 그냥 닫으면 된다.\n' \
