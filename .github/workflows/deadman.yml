@@ -1,0 +1,74 @@
+# 기계 밖 데드맨 스위치 — dongheon-hub/nav-b46bf63c 의 .github/workflows/deadman.yml 원본.
+#
+# 2026-08-17 사후조치. 그날 기계가 장 시간 내내 꺼져 있어 자동 체인이 통째로 미가동했으나
+# 아무 경보도 없었다 — 경보를 보낼 주체가 같은 기계에서 돌기 때문이다.
+# 이 워크플로는 honey 의 기계 **밖**에서 돌기 때문에 기계가 꺼져도 살아있다.
+#
+# 갱신: scripts/push_heartbeat.py --workflow (이 파일을 그대로 push)
+name: deadman
+
+on:
+  schedule:
+    # 00:50 UTC = 09:50 KST 평일. 09:36 후보 발송 + 여유 14분.
+    - cron: '50 0 * * 1-5'
+  workflow_dispatch:
+
+permissions:
+  issues: write
+  contents: read
+
+jobs:
+  check:
+    runs-on: ubuntu-latest
+    env:
+      GH_TOKEN: ${{ github.token }}
+      REPO: ${{ github.repository }}
+    steps:
+      - name: 오늘 산출물이 도착했는가
+        run: |
+          ISO=$(TZ=Asia/Seoul date +%Y-%m-%d)
+          DAY=$(TZ=Asia/Seoul date +%Y%m%d)
+          echo "KST $ISO 판정 시작"
+
+          # 평일 휴장일(설·추석·대체공휴일 등)은 산출물이 없는 것이 정상.
+          # 목록은 기계 쪽 calendar.py 가 holidays.json 으로 내보낸다.
+          HOL=$(gh api "repos/$REPO/contents/holidays.json" --jq .content 2>/dev/null | base64 -d || echo '')
+          if [ -n "$HOL" ] && echo "$HOL" | jq -e --arg d "$ISO" '.non_trading_weekdays | index($d) != null' >/dev/null; then
+            echo "휴장일 — 확인 생략"; exit 0
+          fi
+
+          HB=$(gh api "repos/$REPO/contents/heartbeat/$DAY.json" --jq .content 2>/dev/null | base64 -d || echo '')
+          ALIVE=''; DIGEST=''
+          if [ -n "$HB" ]; then
+            ALIVE=$(echo "$HB" | jq -r '.kinds.alive.at  // ""')
+            DIGEST=$(echo "$HB" | jq -r '.kinds.digest.at // ""')
+          fi
+
+          if [ -n "$ALIVE" ] && [ -n "$DIGEST" ]; then
+            echo "정상 — alive $ALIVE · digest $DIGEST"; exit 0
+          fi
+
+          if [ -z "$ALIVE" ] && [ -z "$DIGEST" ]; then
+            DIAG='하트비트 전무 — 기계가 꺼져 있거나 08:55 게이트에 도달하지 못했다.'
+            ACT='기계 전원 확인. 켜져 있다면 부팅 시각(Event 12)과 로그온 여부부터 볼 것.'
+          elif [ -z "$DIGEST" ]; then
+            DIAG="기계는 살아있었으나(alive $ALIVE) 09:36 후보가 나오지 않았다 — 체인 결함."
+            ACT='인트라데이 수집 파일과 orb_digest 태스크 LastTaskResult 확인.'
+          else
+            DIAG="alive 누락(digest $DIGEST 만 도착) — 기동 경로 이상."
+            ACT='phase1_auto_daily 게이트 로그 확인.'
+          fi
+
+          TITLE="[미가동 의심] $ISO 산출물 미도착"
+          FOUND=$(gh issue list --state open --search "in:title \"$TITLE\"" --json number --jq 'length')
+          if [ "$FOUND" != "0" ]; then
+            echo "이미 열린 이슈 있음 — 중복 생성 생략"; exit 0
+          fi
+
+          gh issue create \
+            --title "$TITLE" \
+            --assignee dongheonlee-hub \
+            --body "$(printf '%s\n\n**판정**: %s\n\n**첫 확인**: %s\n\n---\n이 이슈는 honey 의 기계 밖(GitHub Actions)에서 자동 생성됐다.\n기계가 꺼져도 이 감시는 살아있다 — 그것이 이 장치의 존재 이유다.\n오탐이면 그냥 닫으면 된다.\n' \
+                "KST $ISO 09:50 기준으로 오늘 산출물 하트비트가 확인되지 않았다." "$DIAG" "$ACT")"
+
+          echo "이슈 생성됨"
