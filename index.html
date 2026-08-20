@@ -73,7 +73,13 @@ footer .cav{padding:12px 14px;background:var(--surface-2);border-radius:12px;bor
 .trd-empty{margin:0 4px;padding:22px 16px;text-align:center;color:var(--ink-3);font-size:13px;background:var(--surface-2);border:1px dashed var(--line);border-radius:12px}
 </style></head><body><div class="shell">
 <header><div class="hd-top"><div class="hd-title">Quant Stock</div><div class="hd-badge">PAPER · 시뮬레이션</div></div>
-<div class="hd-acct"><b>quant_stock</b> · 내부원장 | as-of <b id="asof"></b></div></header>
+<div class="hd-acct"><b>quant_stock</b> · 아래 숫자는 <b>내부 시뮬레이션 원장</b>(시드 ₩10M) | as-of <b id="asof"></b></div></header>
+<div id="broker-banner" style="display:none;margin:10px 0;padding:12px 14px;border-radius:12px;background:#0f2f22;border:1px solid #1d6b4c">
+<div style="font-size:12px;letter-spacing:.02em;color:#7fd4aa;font-weight:700">실계좌 (브로커 · 진실원천)</div>
+<div class="num" id="bk-nav" style="font-size:26px;font-weight:800;margin-top:2px"></div>
+<div class="num" id="bk-sub" style="font-size:12px;color:#9fb8ac;margin-top:4px"></div>
+<div class="num" id="bk-warn" style="font-size:12px;font-weight:700;margin-top:4px"></div>
+</div>
 <div class="tabs"><button class="tab on" id="tab-bal" onclick="showTab('bal')">잔고</button><button class="tab" id="tab-trd" onclick="showTab('trd')">금일매매</button></div>
 <div id="view-bal">
 <section class="summary">
@@ -99,12 +105,22 @@ footer .cav{padding:12px 14px;background:var(--surface-2);border-radius:12px;bor
 <div class="trd-grp"><h3>매도 <span class="tag sell" id="sell-n">0</span></h3><div id="sells"></div></div>
 <footer><div class="cav">※ 내부 PaperPortfolio 원장 기준 <b>금일 체결</b>. 정기 리밸런스는 종가단일가(15:20~30)에 체결 → 장 마감 후 반영. 자본 0·시뮬레이션.</div></footer>
 </div>
-<script id="nav-data" type="application/json">{"asof": "2026-08-20 17:05", "trades": {"buys": [], "sells": [], "date": "2026-08-20"}, "nav": 10078033.398499997, "seed": 10000000.0, "total_pnl": 78033.39849999733, "pnl_pct": 0.7803339849999702, "cash": 75408.39849999733, "pos_value": 10002625.0, "pos_cost": 9646116.637931034, "realized": -275974.67956896557, "unrealized": 356508.36206896603, "mark_date": "Naver 근실시간", "ledger_mtime": "2026-08-20T15:35:06.137717", "rows": [{"symbol": "069500", "name": "KODEX 200", "qty": 78.0, "avg_price": 107256.41025641025, "mark": 108190.0, "unrealized": 72820.0}, {"symbol": "229200", "name": "KODEX 코스닥150", "qty": 107.0, "avg_price": 11963.706896551725, "mark": 14615.0, "unrealized": 283688.36206896557}], "history": [{"date": "2026-08-02", "nav": 9388015}, {"date": "2026-08-03", "nav": 9315245}, {"date": "2026-08-04", "nav": 9572415}, {"date": "2026-08-05", "nav": 9660123}, {"date": "2026-08-06", "nav": 9242668}, {"date": "2026-08-07", "nav": 9182163}, {"date": "2026-08-10", "nav": 9321538}, {"date": "2026-08-11", "nav": 9399538}, {"date": "2026-08-12", "nav": 9702343}, {"date": "2026-08-13", "nav": 10026068}, {"date": "2026-08-14", "nav": 10246898}, {"date": "2026-08-17", "nav": 10246898}, {"date": "2026-08-18", "nav": 10060638}, {"date": "2026-08-19", "nav": 9535298}, {"date": "2026-08-20", "nav": 10078033}]}</script>
+<script id="nav-data" type="application/json">{"asof": "2026-08-21 06:25", "trades": {"buys": [], "sells": [], "date": "2026-08-21"}, "nav": 10078033.398499997, "seed": 10000000.0, "total_pnl": 78033.39849999733, "pnl_pct": 0.7803339849999702, "cash": 75408.39849999733, "pos_value": 10002625.0, "pos_cost": 9646116.637931034, "realized": -275974.67956896557, "unrealized": 356508.36206896603, "mark_date": "Naver 근실시간", "ledger_mtime": "2026-08-20T15:35:06.137717", "broker": {"nav": 639228330.0, "pos_value": 850564465.0, "implied_cash": -211336135.0, "margin_debt": 211336135.0, "rows": [{"symbol": "069500", "name": "KODEX 200", "qty": 5083.0, "mark": 108190.0, "value": 549929770.0, "unrealized": null}, {"symbol": "229200", "name": "KODEX 코스닥150", "qty": 18593.0, "mark": 14615.0, "value": 271736695.0, "unrealized": null}, {"symbol": "084370", "name": "유진테크", "qty": 30.0, "mark": 134600.0, "value": 4038000.0, "unrealized": null}, {"symbol": "031980", "name": "피에스케이홀딩스", "qty": 34.0, "mark": 115400.0, "value": 3923600.0, "unrealized": null}, {"symbol": "087010", "name": "펩트론", "qty": 21.0, "mark": 185900.0, "value": 3903900.0, "unrealized": null}, {"symbol": "080220", "name": "제주반도체", "qty": 45.0, "mark": 76500.0, "value": 3442500.0, "unrealized": null}, {"symbol": "000500", "name": "가온전선", "qty": 16.0, "mark": 164900.0, "value": 2638400.0, "unrealized": null}, {"symbol": "204320", "name": "HL만도", "qty": 43.0, "mark": 54200.0, "value": 2330600.0, "unrealized": null}, {"symbol": "178320", "name": "서진시스템", "qty": 58.0, "mark": 38800.0, "value": 2250400.0, "unrealized": null}, {"symbol": "007660", "name": "이수페타시스", "qty": 21.0, "mark": 105000.0, "value": 2205000.0, "unrealized": null}, {"symbol": "035420", "name": "NAVER", "qty": 7.0, "mark": 219500.0, "value": 1536500.0, "unrealized": null}, {"symbol": "039030", "name": "이오테크닉스", "qty": 3.0, "mark": 415000.0, "value": 1245000.0, "unrealized": null}, {"symbol": "112610", "name": "씨에스윈드", "qty": 23.0, "mark": 48400.0, "value": 1113200.0, "unrealized": null}, {"symbol": "035720", "name": "카카오", "qty": 7.0, "mark": 38700.0, "value": 270900.0, "unrealized": null}], "nav_at": "2026-08-20T15:07:01", "nav_source": "HTS_DIRECT", "unpriced_symbols": [], "source_of_truth": "broker", "age_sec": 55127.629029, "fresh": false}, "rows": [{"symbol": "069500", "name": "KODEX 200", "qty": 78.0, "avg_price": 107256.41025641025, "mark": 108190.0, "unrealized": 72820.0}, {"symbol": "229200", "name": "KODEX 코스닥150", "qty": 107.0, "avg_price": 11963.706896551725, "mark": 14615.0, "unrealized": 283688.36206896557}], "history": [{"date": "2026-08-02", "nav": 9388015}, {"date": "2026-08-03", "nav": 9315245}, {"date": "2026-08-04", "nav": 9572415}, {"date": "2026-08-05", "nav": 9660123}, {"date": "2026-08-06", "nav": 9242668}, {"date": "2026-08-07", "nav": 9182163}, {"date": "2026-08-10", "nav": 9321538}, {"date": "2026-08-11", "nav": 9399538}, {"date": "2026-08-12", "nav": 9702343}, {"date": "2026-08-13", "nav": 10026068}, {"date": "2026-08-14", "nav": 10246898}, {"date": "2026-08-17", "nav": 10246898}, {"date": "2026-08-18", "nav": 10060638}, {"date": "2026-08-19", "nav": 9535298}, {"date": "2026-08-20", "nav": 10078033}, {"date": "2026-08-21", "nav": 10078033}]}</script>
 <script>
 const D=JSON.parse(document.getElementById("nav-data").textContent);
 const won=v=>(v<0?"\u2212":"")+Math.abs(Math.round(v)).toLocaleString("ko-KR");
 const dncls=v=>v<0?"down":"up";
 document.getElementById("asof").textContent=D.asof+" KST";
+if(D.broker&&D.broker.nav>0){
+  const B=D.broker;
+  document.getElementById("broker-banner").style.display="block";
+  document.getElementById("bk-nav").innerHTML=won(B.nav)+'<small style="font-size:15px">원</small>';
+  document.getElementById("bk-sub").textContent="보유평가 "+won(B.pos_value)+"원 · 현금(역산) "+won(B.implied_cash)+"원 · 기준 "+(B.nav_at||"").slice(5,16).replace("T"," ");
+  const w=[];
+  if(B.margin_debt>0){w.push("⚑ 미수 "+won(B.margin_debt)+"원");}
+  if(B.fresh===false){w.push("⚠ 갱신 지연 — 루프 미가동 가능");}
+  const wn=document.getElementById("bk-warn");wn.textContent=w.join("  ·  ");wn.style.color=w.length?"#ff8f8f":"transparent";
+}
 document.getElementById("nav").innerHTML=won(D.nav)+'<small>원</small>';
 const pv=document.getElementById("pnl");pv.textContent=(D.total_pnl>=0?"+":"\u2212")+Math.abs(Math.round(D.total_pnl)).toLocaleString("ko-KR");pv.className="pnl-amt num "+dncls(D.total_pnl);
 const pp=document.getElementById("pnlpct");pp.textContent=(D.total_pnl>=0?"▲ ":"▼ ")+Math.abs(D.pnl_pct).toFixed(2)+"%";pp.className="pnl-pct num "+(D.total_pnl>=0?"up-bg":"down-bg");
